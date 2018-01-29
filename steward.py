@@ -4,53 +4,6 @@ import re
 import os
 import datetime
 import threading
-import paramiko
-
-# def checkConnection(ip):
-#     """check connection to input ip address."""
-#     if subprocess.call('ping -n 1 -w 1 {0}'.format(ip)) == 0:
-#         print('{0} online.'.format(ip))
-#         return 0
-#     else:
-#         retry = subprocess.call('ping -n 1 -w 1 {0}'.format(ip))
-#         if retry != 0:
-#             print('{0} offline.'.format(ip))
-#             return 1
-#         else:
-#             print('{0} online.'.format(ip))
-#             return 0
-def ssh_command(ip, command, username='root', password='Password1'):
-    s = paramiko.SSHClient()
-    s.load_system_host_keys
-    s.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-
-    try:
-        s.connect(ip, 22, username, password)
-    except paramiko.ssh_exception.AuthenticationException: 
-        username = 'dera'
-        s.connect(ip, 22, username, password)
-        ssh = s.invoke_shell()
-        time.sleep(0.1)
-        ssh.send('su - \n')
-        time.sleep(1)
-        # buff = ''
-        # while not buff.endswith('Password: '):
-        #     resp = str(ssh.recv(9999))
-        #     buff += resp
-        ssh.send(password)
-        ssh.send('\n')
-        
-    # except Exception:
-        # return
-    result = []
-    stdin, stdout, stderr = s.exec_command(command)
-    result = stdout.readlines()
-    # if not result:
-    #     time.sleep(7)
-    #     stdin, stdout, stderr = ssh.exec_command(command)
-    #     result = stdout.readlines()
-    s.close()
-    return result
 
 def findString(string,reg):
     regObj = re.compile(reg)
